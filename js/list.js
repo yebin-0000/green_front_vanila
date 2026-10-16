@@ -1,0 +1,1 @@
+renderposts(posts);
