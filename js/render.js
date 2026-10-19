@@ -1,4 +1,4 @@
-function renderposts (posts) {
+function renderPosts (posts) {
     const list = document.querySelector("#post-list");
     if (posts.length === 0) {
         list.textContent = "아직 게시글이 없습니다"; 
@@ -12,7 +12,7 @@ function renderposts (posts) {
 
         const meta = document.createElement("div");
         meta.className = "meta";
-        meta.textContent = `${post.author} | ${post.createdDatetime}`;
+        meta.textContent = `${post.authorNickname} | ${post.createdDatetime}`;
 
         item.append(link, meta);
         list.append(item);
