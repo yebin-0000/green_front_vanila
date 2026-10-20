@@ -38,6 +38,7 @@ async function apiRequest(path, method = "GET", body = null) {
     }
     const result = await response.json().catch((err) => {
         console.log(err);
+        return null;
     });
 
     

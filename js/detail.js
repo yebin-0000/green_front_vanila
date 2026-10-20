@@ -2,24 +2,49 @@ const params = new URLSearchParams(location.search);
 const postId = Number(params.get("id"));
 
 // posts 배열에서 사용자가 누른 게시글 찾기
-async function loadPosts() {
+async function loadPost() {
     try {
         // 게시글 상세 조회 API 호충
         const post = await apiRequest(`/board/${postId}`);
         renderPost(post);
         document.querySelector("#post-message").textContent="";
+        return true;
+
     }catch (error) {
         document.querySelector("#post-title").textContent = "게시글 조회 실패";
         document.querySelector("#post-content").textContent = "";
         document.querySelector("#post-message").textContent = error.message;
-        
+        return false;
     }
 }
-document.querySelector("#comments-section").hidden =true;
+
+async function loadComments() {
+    try {
+        const comments = await apiRequest(`/board/${postId}/comment`);
+        renderComments(comments) 
+
+    } catch (error) {
+        document.querySelector("#comment-message").textContent = error.message;
+
+    }
+    
+}
 
 if (requireLogin()) {
     if (Number.isSafeInteger(postId) && postId > 0) {
-    loadPosts();
+        // 비동기 작업을 위한 방법
+        // 1. async / await
+        // 2. promise -> then() / catch()
+
+        // 게시글 상세 정보 조회
+        loadPost().then(function (success) {
+            if (success) {
+                loadComments();
+
+            }
+        });
+
+        
     
     // 지금 postId에 해당하는 댓글만 출력하도록 필터링
     //let filteredComments = comments.filter(comment => comment.boardId === postId);

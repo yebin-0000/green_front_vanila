@@ -7,10 +7,10 @@ const nextButton = document.querySelector("#next-page");
 if (requireLogin()) {
     
     // 게시글 리스트 조회 및 렌더링
-    loadPosts();
+    loadPost();
 }
 
-async function loadPosts(page = currentPage) {
+async function loadPost(page = currentPage) {
     try {
         const data = await apiRequest(`/board?page=${page}&size=10`);
         renderPosts(data.content); 
@@ -41,12 +41,12 @@ async function loadPosts(page = currentPage) {
 
 previousButton.addEventListener("click", function () {
     if(currentPage > 0) {
-        loadPosts(currentPage -1);
+        loadPost(currentPage -1);
     }
 
 });
 nextButton.addEventListener("click", function () {
     if (currentPage + 1 < totalPages) {
-        loadPosts(currentPage + 1);
+        loadPost(currentPage + 1);
     }
 });
