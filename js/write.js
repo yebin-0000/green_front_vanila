@@ -5,31 +5,29 @@ requireLogin();
 
 const form = document.querySelector("#post-form")
 
-form.addEventListener("submit", function(event) {
+form.addEventListener("submit", savePost);
+
+async function savePost(event) {
     event.preventDefault();
     const title = form.elements.title.value.trim();
     const content = form.elements.content.value.trim();
 
-    if(title.length < 10 || title.length > 50 || content.length < 10) {
-        document.querySelector("#form-message").textContent =
-            "제목은 10~50자, 본문은 10자 이상 입력하세요.";
+    // #form-message 요소를 필요할 때마다 생성해 사용하지 않고,
+    // 미리 변수에 저장해 재사용하는 방식으로 구현
+    const formMessage = document.querySelector("#form-message");
+
+    if (title.length < 10 || title.length > 50 || content.length < 10) {
+        formMessage.textContent = "제목은 10~50자, 본문은 10자 이상 입력하세요.";
             return;
     }
+    try {
+        await apiRequest("/board", "POST", {title, content}); 
+        
+        // index.html 경로로 이동
+        location.href = "index.html";
 
+    } catch (error) {
+        formMessage.textContent = error.message;
 
-    // 신규 게시글 추가
-    posts.push(
-        {
-            id: getPostNextId(),
-            title: title,
-            content: content,
-            author: "실습 사용자",
-            createdDatetime: new Date().toString().slice(0, 10)
-        }
-    );
-    saveLocal();
-
-    // index.html 경로로 이동
-    location.href = "index.html";
-
-});
+    }
+}
